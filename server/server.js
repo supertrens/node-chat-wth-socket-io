@@ -3,6 +3,9 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 
+const { generateMessage } = require('./utils/message');
+const { NEW_MESSAGE, CREATE_MESSAGE } = require('./constant/constant');
+
 const publicPath = path.join(__dirname, '../public');
 
 const app = express();
@@ -10,24 +13,16 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 io.on('connection', socket => {
-  socket.emit('newMessage', {
-    from: 'admin',
-    text: 'welcome to the chat app',
-    createdAt: new Date().getDate()
-  });
+  socket.emit(NEW_MESSAGE, generateMessage('Admin', 'Welcome to our chat app'));
 
-  socket.broadcast.emit('newMessage', {
-    from: 'Admin',
-    text: 'New user has joined the chat room',
-    createdAt: new Date().getDate()
-  });
+  socket.broadcast.emit(
+    NEW_MESSAGE,
+    generateMessage('Admin', 'New user has joined the chat room')
+  );
 
-  socket.on('createMessage', (msg = {}) => {
-    io.emit('newMessage', {
-      from: msg.from,
-      text: msg.text,
-      createdAt: new Date().getDate()
-    });
+  socket.on(CREATE_MESSAGE, (msg = {}) => {
+    io.emit(NEW_MESSAGE, generateMessage(msg.from, msg.text));
+
     // socket.broadcast.emit('newMessage', {
     //   from: msg.from,
     //   text: msg.text,
