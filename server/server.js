@@ -10,15 +10,13 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 io.on('connection', socket => {
-  socket.emit('newMessage', {
-    from: 'Pitrens',
-    text: 'I am getting good at it',
-    createdAt: 123
-  });
-
   socket.on('createMessage' , (msg={}) => {
-    msg.createdAt = 123;
-    console.log('message created ' , msg);
+    io.emit('newMessage' , {
+      from: msg.from,
+      text: msg.text,
+      createdAt: new Date().getDate()
+    });
+
   });
 
   socket.on('disconnect', () => {

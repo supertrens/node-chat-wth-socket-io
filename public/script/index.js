@@ -15,10 +15,3 @@ socket.on('reconnect' , function() {
 socket.on('newMessage' , function(msg){
   console.log('New message has been emit', msg);
 });
-
-socket.emit('createMessage' , {
-  from : 'Muneca',
-  text: "What's up honey",
-});
-
-console.log('loading');
