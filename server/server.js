@@ -10,13 +10,29 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 io.on('connection', socket => {
-  socket.on('createMessage' , (msg={}) => {
-    io.emit('newMessage' , {
+  socket.emit('newMessage', {
+    from: 'admin',
+    text: 'welcome to the chat app',
+    createdAt: new Date().getDate()
+  });
+
+  socket.broadcast.emit('newMessage', {
+    from: 'Admin',
+    text: 'New user has joined the chat room',
+    createdAt: new Date().getDate()
+  });
+
+  socket.on('createMessage', (msg = {}) => {
+    io.emit('newMessage', {
       from: msg.from,
       text: msg.text,
       createdAt: new Date().getDate()
     });
-
+    // socket.broadcast.emit('newMessage', {
+    //   from: msg.from,
+    //   text: msg.text,
+    //   createdAt: new Date().getDate()
+    // });
   });
 
   socket.on('disconnect', () => {
