@@ -12,4 +12,13 @@ socket.on('reconnect' , function() {
   console.log('You are back to the game');
 });
 
+socket.on('newMessage' , function(msg){
+  console.log('New message has been emit', msg);
+});
+
+socket.emit('createMessage' , {
+  from : 'Muneca',
+  text: "What's up honey",
+});
+
 console.log('loading');
