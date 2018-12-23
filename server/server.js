@@ -20,8 +20,10 @@ io.on('connection', socket => {
     generateMessage('Admin', 'New user has joined the chat room')
   );
 
-  socket.on(CREATE_MESSAGE, (msg = {}) => {
+  socket.on(CREATE_MESSAGE, (msg = {}, callback) => {
+    console.log('Create Message ' , msg)
     io.emit(NEW_MESSAGE, generateMessage(msg.from, msg.text));
+    callback('This is from the server'); //acknowledge that we have received the emit
 
     // socket.broadcast.emit('newMessage', {
     //   from: msg.from,
