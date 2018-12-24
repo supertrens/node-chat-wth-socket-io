@@ -13,16 +13,17 @@
     <div><ol class="message"></ol></div>
 
     <form id="message-form">
-      <input type="text" name="from" id="from" placeholder="From" /> <br />
+      <input type="text" name="from" id="from" placeholder="From" />
       <input
         type="text"
         name="textMessage"
         id="textMessage"
         placeholder="Text"
       />
-      <br />
       <button>Submit</button>
     </form>
+
+    <button id='send-location'>Send Location</button>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="script/index.js"></script>

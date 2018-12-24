@@ -3,8 +3,13 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 
-const { generateMessage } = require('./utils/message');
-const { NEW_MESSAGE, CREATE_MESSAGE } = require('./constant/constant');
+const { generateMessage, generateLocationMessage } = require('./utils/message');
+const {
+  CREATE_MESSAGE,
+  NEW_MESSAGE,
+  CREATE_LOCATION_MESSAGE,
+  NEW_LOCATION_MESSAGE
+} = require('./constant/constant');
 
 const publicPath = path.join(__dirname, '../public');
 
@@ -21,15 +26,16 @@ io.on('connection', socket => {
   );
 
   socket.on(CREATE_MESSAGE, (msg = {}, callback) => {
-    console.log('Create Message ' , msg)
+    console.log('Create Message ', msg);
     io.emit(NEW_MESSAGE, generateMessage(msg.from, msg.text));
     callback('This is from the server'); //acknowledge that we have received the emit
+  });
 
-    // socket.broadcast.emit('newMessage', {
-    //   from: msg.from,
-    //   text: msg.text,
-    //   createdAt: new Date().getDate()
-    // });
+  socket.on(CREATE_LOCATION_MESSAGE, coords => {
+    io.emit(
+      NEW_LOCATION_MESSAGE,
+      generateLocationMessage('Admin', coords.latitude, coords.longitude)
+    );
   });
 
   socket.on('disconnect', () => {
