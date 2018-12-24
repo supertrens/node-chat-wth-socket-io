@@ -13,17 +13,19 @@ socket.on('reconnect', function() {
 });
 
 socket.on('newMessage', function(msg) {
-  console.log('New message has been emit', msg);
+  const newList = $('<li>').text(`${msg.from}: ${msg.text}`);
+  $('.message').append(newList);
 });
-
-socket.emit(
-  'createMessage',
-  { from: 'Prophete', text: 'Everything is good?' },
-  function(data) {
-    console.log('Got it ' , data);
-  }
-);
 
 socket.on('newUser', function(msg) {
   console.log(msg);
+});
+
+$('#message-form').on('submit', function(event) {
+  event.preventDefault();
+
+  const from = $('#from').val();
+  const text = $('#textMessage').val();
+
+  socket.emit('createMessage', { from, text }, function(data) {});
 });
