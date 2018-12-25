@@ -22,13 +22,6 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 io.on(CONNECTION, socket => {
-  socket.emit(NEW_MESSAGE, generateMessage('Admin', 'Welcome to our chat app'));
-
-  socket.broadcast.emit(
-    NEW_MESSAGE,
-    generateMessage('Admin', 'New user has joined the chat room')
-  );
-
   socket.on(CREATE_MESSAGE, (msg = {}, callback) => {
     console.log('Create Message ', msg);
     io.emit(NEW_MESSAGE, generateMessage(msg.from, msg.text));
@@ -47,6 +40,23 @@ io.on(CONNECTION, socket => {
       callback('Name and room are required');
     }
 
+    socket.join(params.room);
+    // socket.leave ('The chat Room');
+
+    socket.emit(
+      NEW_MESSAGE,
+      generateMessage('Admin', 'Welcome to our chat app')
+    );
+
+    socket.broadcast
+      .to(params.room)
+      .emit(
+        NEW_MESSAGE,
+        generateMessage(
+          'Admin',
+          `${params.name} has joined the chat room (${params.room})`
+        )
+      );
     callback();
   });
 
