@@ -9,13 +9,15 @@ socket.on('reconnect', function() {
 });
 
 socket.on('newMessage', function(msg) {
-  const newList = $('<li>').text(`${msg.from}: ${msg.text}`);
+  const formatedTime = moment(msg.createdAt).format('h:mm a')
+  const newList = $('<li>').text(`${msg.from} ${formatedTime}: ${msg.text}`);
   $('#messages').append(newList);
 });
 
 socket.on('newLocationMessage', function(msg){
+  const formatedTime = moment(msg.createdAt).format('h:mm a')
   const locationLink = $(`<a target= "_blank"> My Current Location </a>`).attr('href', msg.url)
-  const newList = $('<li>').text(`${msg.from}: `).append(locationLink);
+  const newList = $('<li>').text(`${msg.from} ${formatedTime}: `).append(locationLink);
   $('#messages').append(newList);
 
 })
