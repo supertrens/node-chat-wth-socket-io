@@ -5,25 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/styles/styles.css" />
     <title>Node APP</title>
   </head>
-  <body>
-    <h1>Welcome to my chat app</h1>
+  <body class="chat">
+    <div class="chat__sidebar">
+      <h3>People</h3>
+      <div id="users"></div>
+    </div>
 
-    <div><ol class="message"></ol></div>
+    <div class="chat__main">
+      <ol id="messages" class="chat__messages"></ol>
 
-    <form id="message-form">
-      <input type="text" name="from" id="from" placeholder="From" />
-      <input
-        type="text"
-        name="textMessage"
-        id="textMessage"
-        placeholder="Text"
-      />
-      <button>Submit</button>
-    </form>
-
-    <button id='send-location'>Send Location</button>
+      <div class="chat__footer">
+        <form id="message-form">
+          <input
+            type="text"
+            name="textMessage"
+            id="textMessage"
+            placeholder="Text"
+            autocomplete="off"
+            autofocus
+          />
+          <button>Submit</button>
+        </form>
+        <button id="send-location">Send Location</button>
+      </div>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="script/index.js"></script>

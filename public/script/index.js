@@ -10,13 +10,13 @@ socket.on('reconnect', function() {
 
 socket.on('newMessage', function(msg) {
   const newList = $('<li>').text(`${msg.from}: ${msg.text}`);
-  $('.message').append(newList);
+  $('#messages').append(newList);
 });
 
 socket.on('newLocationMessage', function(msg){
   const locationLink = $(`<a target= "_blank"> My Current Location </a>`).attr('href', msg.url)
   const newList = $('<li>').text(`${msg.from}: `).append(locationLink);
-  $('.message').append(newList);
+  $('#messages').append(newList);
 
 })
 
@@ -27,10 +27,12 @@ socket.on('newUser', function(msg) {
 $('#message-form').on('submit', function(event) {
   event.preventDefault();
 
-  const from = $('#from').val();
-  const text = $('#textMessage').val();
+  const messageTextbox = $('#textMessage');
+  const text = messageTextbox.val();
 
-  socket.emit('createMessage', { from, text }, function(data) {});
+  socket.emit('createMessage', { from: 'User', text }, function() {
+    messageTextbox.val('');
+  });
 });
 
 const locationButton = $('#send-location');
@@ -40,14 +42,19 @@ locationButton.on('click', function() {
     return alert('Geolocation not supported on your browser.');
   }
 
+  locationButton.attr('disabled', 'disabled').text('Sending Location...')
+
   navigator.geolocation.getCurrentPosition(
     function(position) {
+      locationButton.removeAttr('disabled').text('Send Location');
+
       socket.emit('createLocationMessage', {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
       });
     },
     function() {
+      locationButton.removeAttr('disabled').text('Send Location');
       alert('Unable to share your location');
     }
   );
