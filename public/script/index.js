@@ -9,18 +9,34 @@ socket.on('reconnect', function() {
 });
 
 socket.on('newMessage', function(msg) {
-  const formatedTime = moment(msg.createdAt).format('h:mm a')
-  const newList = $('<li>').text(`${msg.from} ${formatedTime}: ${msg.text}`);
-  $('#messages').append(newList);
+  const formatedTime = moment(msg.createdAt).format('h:mm a');
+  const template = $('#message-template').html();
+
+  Mustache.parse(template); // optional, speeds up future uses
+
+  const rendered = Mustache.render(template, {
+    text: msg.text,
+    from: msg.from,
+    createdAt: formatedTime
+  });
+
+  $('#messages').append(rendered);
 });
 
-socket.on('newLocationMessage', function(msg){
-  const formatedTime = moment(msg.createdAt).format('h:mm a')
-  const locationLink = $(`<a target= "_blank"> My Current Location </a>`).attr('href', msg.url)
-  const newList = $('<li>').text(`${msg.from} ${formatedTime}: `).append(locationLink);
-  $('#messages').append(newList);
+socket.on('newLocationMessage', function(msg) {
+  const formatedTime = moment(msg.createdAt).format('h:mm a');
+  const template = $('#location-message-template').html();
 
-})
+  Mustache.parse(template); // optional, speeds up future uses
+
+  const rendered = Mustache.render(template, {
+    url: msg.url,
+    from: msg.from,
+    createdAt: formatedTime
+  });
+
+  $('#messages').append(rendered);
+});
 
 socket.on('newUser', function(msg) {
   console.log(msg);
@@ -44,7 +60,7 @@ locationButton.on('click', function() {
     return alert('Geolocation not supported on your browser.');
   }
 
-  locationButton.attr('disabled', 'disabled').text('Sending Location...')
+  locationButton.attr('disabled', 'disabled').text('Sending Location...');
 
   navigator.geolocation.getCurrentPosition(
     function(position) {
