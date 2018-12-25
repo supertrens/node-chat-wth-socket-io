@@ -4,13 +4,15 @@ const http = require('http');
 const socketIO = require('socket.io');
 
 const { generateMessage, generateLocationMessage } = require('./utils/message');
+const { isRealString } = require('./utils/validation');
 const {
   CONNECTION,
   DISCONNECT,
   CREATE_MESSAGE,
   NEW_MESSAGE,
   CREATE_LOCATION_MESSAGE,
-  NEW_LOCATION_MESSAGE
+  NEW_LOCATION_MESSAGE,
+  JOIN
 } = require('./constants/index');
 
 const publicPath = path.join(__dirname, '../public');
@@ -38,6 +40,14 @@ io.on(CONNECTION, socket => {
       NEW_LOCATION_MESSAGE,
       generateLocationMessage('Admin', coords.latitude, coords.longitude)
     );
+  });
+
+  socket.on(JOIN, (params, callback) => {
+    if (!isRealString(params.name) || !isRealString(params.room)) {
+      callback('Name and room are required');
+    }
+
+    callback();
   });
 
   socket.on(DISCONNECT, () => {
