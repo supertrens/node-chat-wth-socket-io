@@ -5,11 +5,13 @@ const socketIO = require('socket.io');
 
 const { generateMessage, generateLocationMessage } = require('./utils/message');
 const {
+  CONNECTION,
+  DISCONNECT,
   CREATE_MESSAGE,
   NEW_MESSAGE,
   CREATE_LOCATION_MESSAGE,
   NEW_LOCATION_MESSAGE
-} = require('./constant/constant');
+} = require('./constants/index');
 
 const publicPath = path.join(__dirname, '../public');
 
@@ -17,7 +19,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-io.on('connection', socket => {
+io.on(CONNECTION, socket => {
   socket.emit(NEW_MESSAGE, generateMessage('Admin', 'Welcome to our chat app'));
 
   socket.broadcast.emit(
@@ -38,7 +40,7 @@ io.on('connection', socket => {
     );
   });
 
-  socket.on('disconnect', () => {
+  socket.on(DISCONNECT, () => {
     console.log('One user got disconnected');
   });
 });
