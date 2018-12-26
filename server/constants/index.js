@@ -8,5 +8,6 @@ module.exports = {
   CREATE_MESSAGE: 'createMessage',
   CREATE_LOCATION_MESSAGE: 'createLocationMessage',
   NEW_LOCATION_MESSAGE: 'newLocationMessage',
-  JOIN: 'join'
+  JOIN: 'join',
+  UPDATE_USER_LIST: 'updateUserList'
 };

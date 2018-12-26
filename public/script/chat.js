@@ -19,6 +19,7 @@ function scrollToBottom() {
     messages.scrollTop(scrollHeight);
   }
 }
+
 socket.on('connect', function() {
   const params = $.deparam(window.location.search);
 
@@ -34,6 +35,16 @@ socket.on('connect', function() {
 
 socket.on('disconnect', function() {
   console.log('disconnected from server');
+});
+
+socket.on('updateUserList', function(users) {
+  let ol = $('<ol></ol>');
+
+  users.forEach(function(user) {
+    ol.append($('<li> </li>').text(user));
+  });
+
+  $('#users').html(ol);
 });
 
 socket.on('reconnect', function() {
