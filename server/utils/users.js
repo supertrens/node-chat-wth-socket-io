@@ -18,12 +18,14 @@ class Users {
     return user;
   }
 
-  removeUser(id){
-
+  removeUser(id) {
   }
 
-  getUser(id){
-
+  getUser(id) {
+    // find the user with the given Id and return it
+    return this.users.filter(user => {
+      return user.id === id;
+    });
   }
 
   getUserList(room) {
@@ -31,11 +33,14 @@ class Users {
       return user.room === room;
     });
 
-    return users;
+    const namesArray = users.map(user => {
+      return user.name;
+    });
+
+    return namesArray;
   }
 }
 
 module.exports = {
   Users
-}
-
+};
