@@ -19,13 +19,22 @@ class Users {
   }
 
   removeUser(id) {
+    const userToBeRemoved = this.getUser(id)
+
+    if(userToBeRemoved){
+      this.users = this.users.filter(user => {
+        return user !== userToBeRemoved;
+      });
+    }
+
+    return userToBeRemoved;
   }
 
   getUser(id) {
     // find the user with the given Id and return it
     return this.users.filter(user => {
       return user.id === id;
-    });
+    })[0];
   }
 
   getUserList(room) {

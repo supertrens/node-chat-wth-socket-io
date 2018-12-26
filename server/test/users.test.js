@@ -55,15 +55,32 @@ describe('Users', () => {
   });
 
   it('should find user', ()=> {
-    const user = users.getUser(1);
+    const userID = 1;
+    const user = users.getUser(userID);
 
-    expect(user.length).toBe(1);
-    expect(user[0].name).toBe('Admin');
+    expect(user.id).toBe(userID);
   });
 
   it('should not find user', () => {
-    const user = users.getUser('invalidID');
-    
-    expect(user.length).toBe(0);
-  })
+    const userID = 'invalidID';
+    const user = users.getUser(userID);
+
+    expect(user).toBeUndefined();
+  });
+
+  it('should remove userID 2 ', () => {
+    const userID = 2;
+    const user = users.removeUser(userID);
+
+    expect(user.id).toBe(userID);
+    expect(users.users.length).toBe(2);
+  });
+
+  it('should not remove user', () => {
+    const userID = 'invalidID';
+    const user = users.removeUser(userID);
+
+    expect(users.users.length).toBe(3);
+    expect(user).toBeUndefined();
+  });
 });
