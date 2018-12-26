@@ -17,6 +17,22 @@ class Users {
 
     return user;
   }
+
+  removeUser(id){
+
+  }
+
+  getUser(id){
+
+  }
+
+  getUserList(room) {
+    const users = this.users.filter(user => {
+      return user.room === room;
+    });
+
+    return users;
+  }
 }
 
 module.exports = {
